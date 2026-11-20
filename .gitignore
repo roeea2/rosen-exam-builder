@@ -10,6 +10,8 @@
 *.mov
 *.zip
 *.docx
+# the one-page install and usage guide is the only PDF that belongs in the repo
+!docs/rosen-exam-builder-guide.pdf
 
 # Build output and local state
 *.html
