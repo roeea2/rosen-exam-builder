@@ -1,0 +1,21 @@
+# Never commit books, scans, built exams or images of real pages
+*.pdf
+*.png
+*.jpg
+*.jpeg
+*.heic
+*.tif
+*.tiff
+*.mp4
+*.mov
+*.zip
+*.docx
+
+# Build output and local state
+*.html
+__pycache__/
+*.pyc
+.DS_Store
+.env
+*.local.json
+*-workspace/
