@@ -17,6 +17,30 @@ import re
 import sys
 
 
+MATH_OPEN = re.compile(r'<span class="m" dir="ltr">')
+SPAN_TAG = re.compile(r"<span\b|</span>")
+
+
+def math_spans(body):
+    """Yield (start, inner_start, end) for every inline-math span; nested spans (fractions) stay inside it."""
+    pos = 0
+    while (mm := MATH_OPEN.search(body, pos)):
+        depth, i = 1, mm.end()
+        while depth:
+            tag = SPAN_TAG.search(body, i)
+            if not tag:
+                i = len(body)
+                break
+            depth += 1 if tag.group() == "<span" else -1
+            i = tag.end()
+        yield mm.start(), mm.end(), i
+        pos = i
+
+
+def text(fragment):
+    return html.unescape(re.sub(r"<[^>]+>", "", fragment))
+
+
 def scan(path):
     s = open(path, encoding="utf-8").read()
     body = s[s.find("<body"):] if "<body" in s else s
@@ -24,15 +48,18 @@ def scan(path):
             for mm in re.finditer(r"TODO", body)]
     body = re.sub(r"<svg.*?</svg>", "", body, flags=re.S)
     body = re.sub(r'<div class="eq".*?</div></div>', "", body, flags=re.S)
-    for mm in re.finditer(r'<span class="m" dir="ltr">((?:(?!</span>).)*?)</span>(?:</span>)?\s?([.,:;?])', body, flags=re.S):
-        txt = html.unescape(re.sub(r"<[^>]+>", "", mm.group(1))).strip()
-        if re.match(r"[\d(≈−+-]", txt):
-            hits.append(f"math followed by '{mm.group(2)}': {txt}")
-    plain = html.unescape(re.sub(r"<[^>]+>", "", body))
-    for mm in re.finditer(r"(?<![\w.])\d[\d.,]*\s*[.,:;?](?=\s|$)", plain):
-        hits.append("number followed by punctuation: ..." + plain[max(0, mm.start() - 25): mm.end() + 3].replace("\n", " "))
-    no_math = re.sub(r'<span class="m" dir="ltr">.*?</span>', "", body, flags=re.S)
-    no_math = html.unescape(re.sub(r"<[^>]+>", "", no_math))
+    pieces, last = [], 0
+    for start, inner, end in math_spans(body):
+        txt = text(body[inner:end]).strip()
+        after = re.match(r"(?:</span>)?\s?([.,:;?])", body[end:])
+        if after and re.match(r"[\d(≈−+-]", txt):
+            hits.append(f"math followed by '{after.group(1)}': {txt}")
+        pieces.append(body[last:start])
+        last = end
+    # the text without formulas; a marker keeps the words on both sides of a formula apart
+    no_math = text("".join(p + " ◊ " for p in pieces) + body[last:])
+    for mm in re.finditer(r"(?<![\w.])\d[\d.,]*\s*[.,:;?](?=\s|$)", no_math):
+        hits.append("number followed by punctuation: ..." + no_math[max(0, mm.start() - 25): mm.end() + 3].replace("\n", " "))
     for mm in re.finditer(r"\d+(?:\.\d+)?\s*[·×+−=]\s*\d", no_math):
         hits.append("calculation outside m(): ..." + no_math[max(0, mm.start() - 15): mm.end() + 10].replace("\n", " "))
     return hits
