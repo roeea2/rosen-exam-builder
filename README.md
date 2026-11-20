@@ -26,7 +26,7 @@
 
 כותבים ל-Claude Code "תבנה לי מבחן באופטיקה לכיתה י׳", עונים על כמה שאלות קצרות, ומקבלים מבחן בפיזיקה מעוצב
 להדפסה, מבוסס על הפרקים בספר של עדי רוזן, עם איורים מדויקים, דף תשובות מלא ואם רוצים גם מבחן חזרה או מועד ב׳.
-כל מספר בתשובות מחושב ונבדק בקוד, וסוכן נפרד פותר את המבחן "עיוור" לפני שהוא מגיע אליכם.
+כל מספר בתשובות מחושב ונבדק בקוד, סוכן נפרד פותר את המבחן "עיוור", וסוכן נוסף בודק את דף התשובות, לפני שמשהו מגיע אליכם.
 
 | מקבלים | תיאור |
 |---|---|
@@ -45,8 +45,9 @@ flowchart LR
     B --> C[תכנון השאלות והנתונים]
     C --> D[בנייה: נתונים, איורים, טקסט]
     D --> E[בדיקת כל תשובה בקוד]
-    E --> F[פתרון עיוור בידי סוכן נפרד]
-    F --> G[PDF מוכן להדפסה]
+    E --> F[פתרון עיוור ובדיקת דף התשובות]
+    F --> H[טבלת התאמה: כל סעיף תואם]
+    H --> G[PDF מוכן להדפסה]
 ```
 
 <div dir="rtl">
@@ -108,8 +109,10 @@ git clone https://github.com/roeea2/rosen-exam-builder.git .claude/skills/rosen-
 ## בקרת איכות
 
 * **נתונים אחד, אמת אחת:** השאלות, האיורים ודף התשובות נבנים מאותו קובץ נתונים, כך שהם לא יכולים לסתור זה את זה.
-* **בדיקה בקוד:** כל מספר שמופיע בדף התשובות מחושב מחדש ונבדק לפני כל בנייה.
+* **בדיקה בקוד:** כל מספר שמופיע בדף התשובות מחושב מחדש ונבדק. הבנייה עצמה מריצה את הבדיקות ונעצרת אם אחת נכשלת, כך שלא נוצר PDF עם תשובה שגויה.
 * **פתרון עיוור:** סוכן נפרד פותר את המבחן מתוך ה-PDF בלבד, ומדווח על ניסוחים דו-משמעיים, נתונים לא מציאותיים וטעויות.
+* **בדיקת דף התשובות:** סוכן נוסף מקבל את המבחן ואת דף התשובות (בלי קוד המקור), פותר כל סעיף בעצמו ובודק תשובה, יחידות, הסבר וסרטוט.
+* **טבלת התאמה:** שורה לכל סעיף: הפתרון העיוור מול דף התשובות. שום דבר לא נמסר עד שכל השורות תואמות.
 * **עברית נכונה:** סורק מיוחד מאתר מלכודות של כתיבה מימין לשמאל, כמו נקודה שנצמדת למספר והופכת את "30°." ל-".30°".
 * **בדיקה חזותית:** כל עמוד נבדק כתמונה: תוויות שמתנגשות, איור שנפרד מהטקסט שלו, עמוד כמעט ריק.
 
@@ -136,7 +139,7 @@ scripts/find_books.py        מאתר את קובצי הספרים בפרויק�
 scripts/render_pages.py      מציג עמודים מהספר ומהמבחן כתמונות
 scripts/rtl_scan.py          מאתר בעיות תצוגה מימין לשמאל
 templates/                   data.py, verify.py, figs.py, build.py
-references/                  מפת הספרים, כללי כתיבת שאלות, כללי עימוד, תהליך הפתרון העיוור
+references/                  מפת הספרים, כללי כתיבת שאלות, כללי עימוד, הפתרון העיוור ובדיקת דף התשובות
 docs/                        מדריך התקנה ושימוש של עמוד אחד
 ```
 
@@ -145,8 +148,8 @@ docs/                        מדריך התקנה ושימוש של עמוד א
 Rosen Exam Builder is a project-scoped [Claude Code](https://claude.com/claude-code) skill for physics teachers in
 Israel. It interviews the teacher (subject, chapters, duration, difficulty, number of questions, review exam, answer
 sheet), reads the relevant chapters of Adi Rosen's textbooks from the teacher's own copy, writes original
-bagrut-style questions with computed SVG figures, verifies every answer in code, runs a blind solve with an
-independent agent, and prints right-to-left Hebrew A4 PDFs with headless Chrome. Install it inside a project with
+bagrut-style questions with computed SVG figures, verifies every answer in code (the build stops on a failed
+check), runs a blind solve and an answer-sheet audit with independent agents, requires every sub-part to match, and prints right-to-left Hebrew A4 PDFs with headless Chrome. Install it inside a project with
 `git clone https://github.com/roeea2/rosen-exam-builder.git .claude/skills/rosen-exam-builder`.
 
 ## License

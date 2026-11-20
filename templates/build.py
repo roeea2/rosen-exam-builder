@@ -1,11 +1,11 @@
 """Builds {{TITLE}} as A4 PDFs (exam{{DOCS}}).
 
-    python3 verify.py                 # recompute and check every answer first
-    python3 build.py
-    python3 rtl_scan.py *.html        # right-to-left typesetting traps
+    python3 build.py                  # runs every check in verify.py first and stops if one fails
+    python3 rtl_scan.py *.html        # right-to-left typesetting traps and leftover TODO placeholders
 """
 from pathlib import Path
 
+import verify  # noqa: F401  (recomputes and checks every answer; an AssertionError here means: fix data.py first)
 import examkit as K
 from examkit import m, frac, part, sub, eq, res, fig, side_by_side, keep, th, IMP, NBSP
 import figs as F

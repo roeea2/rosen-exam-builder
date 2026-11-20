@@ -8,6 +8,7 @@ like a decimal number. The scan flags:
   1. inline math (class="m") that starts with a digit, a sign or ≈ and is followed directly by . , : ; ?
   2. plain-text numbers followed by punctuation (e.g. a calculation typed without m(), or "עמ' 39;")
   3. plain-text calculations such as "2 · 4 = 8" outside m(), which the bidi algorithm can reverse
+  4. a TODO placeholder left from the scaffold anywhere in the document (text or figures)
 Fix by rewording so the sentence ends with a Hebrew word ("ביחס לאנך", "בקירוב"), or by wrapping the
 calculation in m() with no punctuation after it.
 """
@@ -19,9 +20,10 @@ import sys
 def scan(path):
     s = open(path, encoding="utf-8").read()
     body = s[s.find("<body"):] if "<body" in s else s
+    hits = [f"placeholder left in the document: ...{body[max(0, mm.start() - 20): mm.end() + 30]}..."
+            for mm in re.finditer(r"TODO", body)]
     body = re.sub(r"<svg.*?</svg>", "", body, flags=re.S)
     body = re.sub(r'<div class="eq".*?</div></div>', "", body, flags=re.S)
-    hits = []
     for mm in re.finditer(r'<span class="m" dir="ltr">((?:(?!</span>).)*?)</span>(?:</span>)?\s?([.,:;?])', body, flags=re.S):
         txt = html.unescape(re.sub(r"<[^>]+>", "", mm.group(1))).strip()
         if re.match(r"[\d(≈−+-]", txt):
