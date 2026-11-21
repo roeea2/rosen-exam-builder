@@ -11,7 +11,7 @@
 
 # Rosen Exam Builder
 
-**A Claude Code skill that turns Adi Rosen's physics textbooks into print-ready Hebrew exams, answer sheets and review exams.**
+**A Claude Code skill that turns your physics textbook (Adi Rosen's books are built in) or your own class material into print-ready Hebrew exams, answer sheets and review exams.**
 
 ![License: MIT](https://img.shields.io/badge/License-MIT-4a2a7f.svg)
 ![Claude Code skill](https://img.shields.io/badge/Claude%20Code-skill-d97757.svg)
@@ -25,7 +25,9 @@
 ## מה זה עושה
 
 כותבים ל-Claude Code "תבנה לי מבחן באופטיקה לכיתה י׳", עונים על כמה שאלות קצרות, ומקבלים מבחן בפיזיקה מעוצב
-להדפסה, מבוסס על הפרקים בספר של עדי רוזן, עם איורים מדויקים, דף תשובות מלא ואם רוצים גם מבחן חזרה או מועד ב׳.
+להדפסה, מבוסס על הפרקים בספר שלכם, עם איורים מדויקים, דף תשובות מלא ואם רוצים גם מבחן חזרה או מועד ב׳.
+הספרים של עדי רוזן מוכרים לסקיל מראש, ואפשר לבנות מבחן גם מכל ספר פיזיקה אחר או מחומר שלכם: סיכומים, מצגות,
+דפי עבודה ומבחנים קודמים.
 כל מספר בתשובות מחושב ונבדק בקוד, סוכן נפרד פותר את המבחן "עיוור", וסוכן נוסף בודק את דף התשובות, לפני שמשהו מגיע אליכם.
 
 | מקבלים | תיאור |
@@ -59,8 +61,8 @@ flowchart LR
 2. כיתה ורמה: י׳, יא׳ או יב׳ (5 יח״ל)
 3. משך המבחן: שעה, שעה וחצי או שעתיים
 4. רמת קושי: קל, בינוני או ברמת בגרות
-5. **הספר שלכם:** מבקש את העותק שלכם של הספר. גוררים את קובץ ה-PDF (או סריקות של הפרקים) לחלון של Claude Code, או כותבים את הנתיב. אם כבר יש ספר בתיקיית הפרויקט, הוא מציע אותו ושואל אם להשתמש בו
-6. נושאים: לפי פרקי הספר שלכם
+5. **הספר או החומר שלכם** (ספר של עדי רוזן, ספר אחר, סיכומים או דפי עבודה; PDF, סריקות או צילומים): אם יש כבר ספר בפרויקט הסקיל מציע אותו, ואם לא, אפשר לכתוב איפה הקובץ נמצא, או לשים אותו בתיקייה `ספרים/` שהסקיל פותח בפרויקט, והוא ימצא אותו לבד. כדאי שהמילה "פיזיקה" תופיע בשם הקובץ (למשל "פיזיקה - אופטיקה.pdf"), כך שהסקיל ימצא אותו בכל מקום בפרויקט
+6. נושאים: לפי פרקי הספר או החומר שלכם
 7. כמות שאלות, האם לבנות מבחן חזרה, והאם צריך דף תשובות
 
 אפשר גם לבקש מבחן משאלות מסוימות בספר ("שאלות 3, 8 ו-10 מפרק א"): הנוסח נשמר, השאלות ממוספרות מחדש
@@ -123,12 +125,12 @@ git clone https://github.com/roeea2/rosen-exam-builder.git .claude/skills/rosen-
 Python 3.12 ומעלה · Google Chrome או Chromium (להדפסת PDF) · poppler (`pdftoppm`, `pdftotext`, `pdfinfo`) ·
 Pillow (אופציונלי) · חיבור לאינטרנט בזמן הבנייה (הגופנים Heebo ו-STIX נטענים מ-Google Fonts).
 
-## הספרים וזכויות יוצרים
+## ספרים, חומרים וזכויות יוצרים
 
-הספרים של עדי רוזן (מחלקה להוראת המדעים, מכון ויצמן) מוגנים בזכויות יוצרים ואינם כלולים במאגר, והסקיל לא מוריד
-אותם מהאינטרנט. כל מורה עובד מהעותק שלו: PDF של הספר, או סריקות או צילומים של הפרקים. בפעם הראשונה הסקיל
-מבקש את הקובץ, ואם הוא מחוץ לפרויקט, מעתיק אותו לתיקייה `ספרים/` בפרויקט כדי למצוא אותו בפעם הבאה.
-אין לכם את הספר? אפשר לבנות מבחן גם בלי, לפי מפת הפרקים שבסקיל, רק בלי הפניות לעמודים ולתרגילים.
+אף ספר לא כלול במאגר, והסקיל לא מוריד ספרים מהאינטרנט: ספרים מוגנים בזכויות יוצרים, וכל מורה עובד מהעותק שלו.
+לספרים של עדי רוזן (מחלקה להוראת המדעים, מכון ויצמן) יש בסקיל מפת פרקים מוכנה. לכל ספר או חומר אחר הסקיל בונה
+את המפה מתוכן העניינים של הקובץ. הקבצים נשמרים בתיקייה `ספרים/` בפרויקט (מחוץ ל-git), כדי שיימצאו גם בפעם הבאה.
+אין לכם ספר? אפשר לבנות מבחן גם בלי, לפי מפת הפרקים או תוכנית הבגרות, רק בלי הפניות לעמודים ולתרגילים.
 
 ## מבנה המאגר
 
@@ -151,7 +153,8 @@ docs/                        מדריך התקנה ושימוש של עמוד א
 
 Rosen Exam Builder is a project-scoped [Claude Code](https://claude.com/claude-code) skill for physics teachers in
 Israel. It interviews the teacher (subject, chapters, duration, difficulty, number of questions, review exam, answer
-sheet), asks for the teacher's own copy of Adi Rosen's textbook (a PDF or chapter scans; the books are not included),
+sheet), asks for the teacher's own book or material (Adi Rosen's books have a built-in chapter map; any other physics
+textbook, notes or worksheets work too; no book is included),
 reads the relevant chapters, writes original
 bagrut-style questions with computed SVG figures, verifies every answer in code (the build stops on a failed
 check), runs a blind solve and an answer-sheet audit with independent agents, requires every sub-part to match, and prints right-to-left Hebrew A4 PDFs with headless Chrome. Install it inside a project with
