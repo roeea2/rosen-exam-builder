@@ -1,6 +1,6 @@
 ---
 name: rosen-exam-builder
-description: Builds Hebrew high-school physics exams as print-ready A4 PDFs (RTL) from Adi Rosen's textbooks (אופטיקה גאומטרית of קרינה וחומר, מכניקה ניוטונית volumes א-ב, the electricity book), with an optional review exam (מבחן חזרה / מועד ב׳) and full answer sheets. It interviews the teacher first (subject, chapters, duration, difficulty, number of questions, review exam, answer sheet), reads the chapters, writes original bagrut-style questions with computed figures, verifies every number in code, has a blind solver check the exam and an auditor check the answer sheet. Use it whenever someone asks for a physics מבחן, בוחן, מבחן חזרה, מועד ב׳, דף תשובות or פתרון for grades 10-12 on optics, kinematics, dynamics, energy, momentum, electric force or fields, even if the book is not named, and also when they ask for an exam made of specific book exercises.
+description: Builds Hebrew high-school physics exams as print-ready A4 PDFs (RTL) from Adi Rosen's textbooks (אופטיקה גאומטרית of קרינה וחומר, מכניקה ניוטונית volumes א-ב, the electricity book), with an optional review exam (מבחן חזרה / מועד ב׳) and full answer sheets. It interviews the teacher first (subject, chapters, duration, difficulty, number of questions, review exam, answer sheet), asks for the teacher's own copy of the book (PDF or chapter scans), reads the chapters, writes original bagrut-style questions with computed figures, verifies every number in code, has a blind solver check the exam and an auditor check the answer sheet. Use it whenever someone asks for a physics מבחן, בוחן, מבחן חזרה, מועד ב׳, דף תשובות or פתרון for grades 10-12 on optics, kinematics, dynamics, energy, momentum, electric force or fields, even if the book is not named, and also when they ask for an exam made of specific book exercises.
 ---
 
 # Rosen exam builder
@@ -17,8 +17,8 @@ Requirements: Python 3.12+, Google Chrome or Chromium (headless PDF printing), p
 
 ## 1. Interview the teacher
 
-Ask only what the request does not already answer, with the AskUserQuestion tool, in at most two rounds. Write the
-questions in Hebrew, since the teacher works in Hebrew.
+Ask only what the request does not already answer, with the AskUserQuestion tool: two rounds, with the book question
+(section 2) between them. Write the questions in Hebrew, since the teacher works in Hebrew.
 
 Round 1 (one call, up to four questions):
 1. מקצוע: אופטיקה / מכניקה / חשמל.
@@ -26,7 +26,10 @@ Round 1 (one call, up to four questions):
 3. משך המבחן: שעה / שעה וחצי / שעתיים.
 4. רמת קושי: קל ("שאלות לא קשות") / בינוני / ברמת בגרות.
 
-Round 2, after you know the subject and have looked at the book's table of contents:
+Then get the teacher's own copy of the book (section 2) before round 2, because the topics come from its table of
+contents.
+
+Round 2, after you have the book and have looked at its table of contents:
 1. נושאים: multiSelect, with the book's chapters as options (the four most likely; the teacher can type others).
    Example for optics: פרק א אור וראייה / פרק ב החזרת אור / פרק ג שבירת אור / פרק ד עדשות.
 2. כמות שאלות: 2 / 3 / 4 / 5 (the usual exam is 3).
@@ -36,15 +39,30 @@ Round 2, after you know the subject and have looked at the book's table of conte
 If the teacher names specific book exercises, switch to the "specific book questions" mode
 (`references/exam-design.md` section 1) and skip the questions that no longer apply.
 
-## 2. Find and read the book
+## 2. Get the teacher's own book
 
-1. Locate the PDF: `python3 scripts/find_books.py <workspace>`. If nothing is found, ask for the path. Never copy the
-   book into the skill or the repository: it is copyrighted.
-2. Read `references/books.md` for the chapter map, page numbers and the book's conventions.
-3. Read the chosen chapters: table of contents, section headings, the chapter summary and the exercise pages.
+The books are copyrighted, so the skill ships without them and every teacher works from their own copy: a PDF of the
+book, or scans or photos of the chapters. Always ask which copy to use, even when one is lying in the workspace.
+Never download a book, and never copy one into the skill or into any repository.
+
+1. Look for candidates: `python3 scripts/find_books.py <workspace> --subject <optics|mechanics|electricity>`.
+2. Ask with AskUserQuestion, in Hebrew (header "הספר"): "מאיזה עותק של הספר לבנות את המבחן?"
+   * one option per candidate found (file name and page count), the most likely first;
+   * "אעלה את הספר שלי": the teacher drags the PDF into this window or types its full path;
+   * "אין לי את הספר": build from the chapter map in `references/books.md`; say that the answer sheet will not cite
+     pages or exercises.
+   If no candidate was found, ask in plain text instead and wait: "כדי לבנות את המבחן מהפרקים שלמדתם אני צריך את
+   הספר שלכם: גררו לכאן את קובץ ה-PDF (או סריקות של הפרקים), או כתבו את הנתיב המלא אליו."
+3. Check the file: `python3 scripts/find_books.py "<path>"` prints the subject guess, the pages and whether it has a
+   text layer. If it is not the right subject, say so and ask again. If it is outside the workspace, copy it into
+   `<workspace>/ספרים/` so the next exam finds it (if the workspace is a git repository, add `ספרים/` to its
+   .gitignore first) and tell the teacher where it is.
+4. Read `references/books.md` for the chapter map and the book's conventions, then the teacher's table of contents.
+   If its page numbers differ from the map (another edition), use the teacher's pages everywhere.
+5. Read the chosen chapters: section headings, the chapter summary and the exercise pages.
    Scanned books: `python3 scripts/render_pages.py BOOK.pdf --pages 38-43 --dpi 75 --sheet 3 --out <scratch>`.
    Text-layer books: `pdftotext -layout -f N -l M BOOK.pdf -`.
-4. Note the notation, constants and terms the book uses, and which exercises practise each skill. Ask only about
+6. Note the notation, constants and terms the book uses, and which exercises practise each skill. Ask only about
    what the chapters teach.
 
 ## 3. Design the exam
@@ -109,7 +127,8 @@ changes, edit `data.py` / `build.py`, rerun verify and build, and check the chan
 * `scripts/examkit.py`: page layout, header, instructions and formula boxes, inline-math and section helpers, PDF printing.
 * `scripts/svgkit.py`: figure primitives (rays, arcs, mirrors, lamps, eyes, people, half disk, grids, motion-graph axes).
 * `scripts/new_exam.py`: scaffolds an exam folder from `templates/`.
-* `scripts/find_books.py`, `scripts/render_pages.py`: find the textbooks, render book pages and exam pages.
+* `scripts/find_books.py`: list candidate textbooks in a folder, or check one file the teacher gave.
+* `scripts/render_pages.py`: render book pages and exam pages (contact sheets).
 * `scripts/rtl_scan.py`: flags right-to-left punctuation and number-order traps, and leftover TODOs, in the built HTML.
 * `references/books.md`, `references/exam-design.md`, `references/typesetting.md`,
   `references/blind-solve.md` (blind solve, answer-sheet audit, match table).

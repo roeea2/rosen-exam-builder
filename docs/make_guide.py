@@ -58,14 +58,14 @@ BODY = f"""
 
 <div class="card">
   <h2><span class="n">1</span>התקנה בתוך הפרויקט (לא גלובלית)</h2>
-  פותחים את Claude Code בתיקיית הפרויקט שבה נמצאים קובצי הספרים, ומדביקים:
+  פותחים את Claude Code בתיקיית הפרויקט שלכם, ומדביקים:
   <div class="prompt">התקן בפרויקט הזה את הסקיל rosen-exam-builder מהכתובת
   <span class="url">{REPO}</span>
   שכפל אותו לתיקייה <span class="ltr">.claude/skills/rosen-exam-builder</span> של הפרויקט (לא בהתקנה גלובלית),
   בדוק ש-Python&nbsp;3.12+, Google&nbsp;Chrome ו-poppler מותקנים, ואמור לי אם חסר משהו.</div>
   או מהטרמינל, מתוך תיקיית הפרויקט:
   <div class="cmd">git clone {REPO}.git .claude/skills/rosen-exam-builder</div>
-  <span class="note">אחרי ההתקנה פותחים מחדש את Claude Code באותה תיקייה. הספרים מוגנים בזכויות יוצרים ואינם חלק מהסקיל: צריך עותק משלכם (PDF או סריקה) בתיקיית הפרויקט.</span>
+  <span class="note">אחרי ההתקנה פותחים מחדש את Claude Code באותה תיקייה. הספרים מוגנים בזכויות יוצרים ואינם חלק מהסקיל: בפעם הראשונה הסקיל יבקש את העותק שלכם (PDF או סריקה של הפרקים).</span>
 </div>
 
 <div class="card">
@@ -84,6 +84,7 @@ BODY = f"""
       <li>כיתה ורמה: י׳, יא׳ או יב׳ (5 יח״ל)</li>
       <li>משך: שעה, שעה וחצי או שעתיים</li>
       <li>רמת קושי: קל, בינוני או בגרות</li>
+      <li><b>הספר שלכם:</b> גוררים את ה-PDF לחלון</li>
       <li>נושאים, לפי פרקי הספר</li>
       <li>כמות שאלות, מבחן חזרה ודף תשובות</li>
     </ol>

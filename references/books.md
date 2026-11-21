@@ -1,8 +1,9 @@
 # The books
 
 Adi Rosen's physics textbooks (Weizmann Institute, Department of Science Teaching). The books are copyrighted:
-they are never copied into this skill or into its repository. The teacher keeps the PDFs (or chapter scans)
-locally; find them with `scripts/find_books.py` or ask for the path.
+they are never copied into this skill or into its repository. Every teacher gives their own copy (a PDF or chapter
+scans); SKILL.md section 2 says how to ask for it. The map below is from one edition: when the teacher's copy
+numbers its pages differently, follow the teacher's copy.
 
 Page numbers below are printed page numbers. Check the offset in the teacher's copy on the first page you open
 (in a scanned copy the PDF page usually equals the printed page; in the text-layer mechanics volume it does not).

@@ -41,7 +41,8 @@
 
 ```mermaid
 flowchart LR
-    A[ראיון המורה] --> B[קריאת הפרקים בספר]
+    A[ראיון המורה] --> S[הספר שלכם: PDF או סריקה]
+    S --> B[קריאת הפרקים בספר]
     B --> C[תכנון השאלות והנתונים]
     C --> D[בנייה: נתונים, איורים, טקסט]
     D --> E[בדיקת כל תשובה בקוד]
@@ -58,15 +59,16 @@ flowchart LR
 2. כיתה ורמה: י׳, יא׳ או יב׳ (5 יח״ל)
 3. משך המבחן: שעה, שעה וחצי או שעתיים
 4. רמת קושי: קל, בינוני או ברמת בגרות
-5. נושאים: לפי פרקי הספר
-6. כמות שאלות, האם לבנות מבחן חזרה, והאם צריך דף תשובות
+5. **הספר שלכם:** מבקש את העותק שלכם של הספר. גוררים את קובץ ה-PDF (או סריקות של הפרקים) לחלון של Claude Code, או כותבים את הנתיב. אם כבר יש ספר בתיקיית הפרויקט, הוא מציע אותו ושואל אם להשתמש בו
+6. נושאים: לפי פרקי הספר שלכם
+7. כמות שאלות, האם לבנות מבחן חזרה, והאם צריך דף תשובות
 
 אפשר גם לבקש מבחן משאלות מסוימות בספר ("שאלות 3, 8 ו-10 מפרק א"): הנוסח נשמר, השאלות ממוספרות מחדש
 והאיורים מסורטטים מחדש בצורה עקבית עם הנתונים.
 
 ## התקנה (בתוך הפרויקט)
 
-הסקיל מותקן בתיקיית הפרויקט שבה נמצאים הספרים, ולא בהתקנה גלובלית. הדרך הקלה: להדביק ב-Claude Code, מתוך תיקיית הפרויקט:
+הסקיל מותקן בתיקיית הפרויקט שלכם, ולא בהתקנה גלובלית. הדרך הקלה: להדביק ב-Claude Code, מתוך תיקיית הפרויקט:
 
 </div>
 
@@ -123,8 +125,10 @@ Pillow (אופציונלי) · חיבור לאינטרנט בזמן הבנייה
 
 ## הספרים וזכויות יוצרים
 
-הספרים של עדי רוזן (מחלקה להוראת המדעים, מכון ויצמן) מוגנים בזכויות יוצרים ואינם כלולים במאגר. צריך עותק משלכם
-(PDF או סריקה של הפרקים) בתיקיית הפרויקט. הסקיל מאתר אותו לבד, או שואל איפה הוא.
+הספרים של עדי רוזן (מחלקה להוראת המדעים, מכון ויצמן) מוגנים בזכויות יוצרים ואינם כלולים במאגר, והסקיל לא מוריד
+אותם מהאינטרנט. כל מורה עובד מהעותק שלו: PDF של הספר, או סריקות או צילומים של הפרקים. בפעם הראשונה הסקיל
+מבקש את הקובץ, ואם הוא מחוץ לפרויקט, מעתיק אותו לתיקייה `ספרים/` בפרויקט כדי למצוא אותו בפעם הבאה.
+אין לכם את הספר? אפשר לבנות מבחן גם בלי, לפי מפת הפרקים שבסקיל, רק בלי הפניות לעמודים ולתרגילים.
 
 ## מבנה המאגר
 
@@ -147,7 +151,8 @@ docs/                        מדריך התקנה ושימוש של עמוד א
 
 Rosen Exam Builder is a project-scoped [Claude Code](https://claude.com/claude-code) skill for physics teachers in
 Israel. It interviews the teacher (subject, chapters, duration, difficulty, number of questions, review exam, answer
-sheet), reads the relevant chapters of Adi Rosen's textbooks from the teacher's own copy, writes original
+sheet), asks for the teacher's own copy of Adi Rosen's textbook (a PDF or chapter scans; the books are not included),
+reads the relevant chapters, writes original
 bagrut-style questions with computed SVG figures, verifies every answer in code (the build stops on a failed
 check), runs a blind solve and an answer-sheet audit with independent agents, requires every sub-part to match, and prints right-to-left Hebrew A4 PDFs with headless Chrome. Install it inside a project with
 `git clone https://github.com/roeea2/rosen-exam-builder.git .claude/skills/rosen-exam-builder`.
