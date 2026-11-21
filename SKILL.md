@@ -54,12 +54,13 @@ workspace. Never download a book, and never copy one into the skill or into any 
 1. Look for candidates: `python3 scripts/find_books.py <workspace> --subject <optics|mechanics|electricity>`.
    Search only the workspace (the project folder); never scan the teacher's home folder or disk. A file outside the
    workspace is read only when the teacher gives its path.
+   If the workspace is a git repository and has a `ספרים/` folder (the install prompt creates one), make sure it is
+   in the workspace's .gitignore.
 2. Ask with AskUserQuestion, in Hebrew (header "הספר"): "מאיזה ספר או חומר לבנות את המבחן?" Options, in this order:
    * the most likely candidate found, with its file name and page count (only if one was found);
    * "אכתוב איפה הספר נמצא": the teacher types the full path of the file or folder (dragging the file into this
      window pastes its path);
-   * "אשים את הספר בתיקייה": create `<workspace>/ספרים/` (if the workspace is a git repository, add `ספרים/` to its
-     .gitignore first) and say: "שימו את הספר או החומר (PDF, סריקות או צילומים) בתיקייה <the full path of ספרים>.
+   * "אשים את הספר בתיקייה": create `<workspace>/ספרים/` if it is missing (gitignored as in step 1) and say: "שימו את הספר או החומר (PDF, סריקות או צילומים) בתיקייה <the full path of ספרים>.
      כדאי שהמילה "פיזיקה" תופיע בשם הקובץ, למשל "פיזיקה - אופטיקה.pdf", כך שאמצא אותו בכל מקום בפרויקט גם בפעם
      הבאה. כתבו לי כשסיימתם." When the teacher answers, find it with
      `python3 scripts/find_books.py "<workspace>/ספרים" --all`.
